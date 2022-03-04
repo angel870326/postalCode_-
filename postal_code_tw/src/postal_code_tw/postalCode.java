@@ -11,12 +11,17 @@ public class postalCode {
 	private static ArrayList<String> code_city_area; // distinct
 	private static ArrayList<ArrayList<String>> code3_city_area; // distinct
 	private static ArrayList<ArrayList<String>> code3_city; // distinct
+	private static ArrayList<ArrayList<String>> code3_city_area_taipei; // distinct
+	private static ArrayList<ArrayList<String>> code3_city_area_newtaipei; // distinct
+
 	
 	public static void main(String[] args) throws Exception {
 		code_city_area_raw = new ArrayList<String>();
 		code_city_area = new ArrayList<String>();
 		code3_city_area = new ArrayList<ArrayList<String>>();
 		code3_city = new ArrayList<ArrayList<String>>();
+		code3_city_area_taipei = new ArrayList<ArrayList<String>>();
+		code3_city_area_newtaipei = new ArrayList<ArrayList<String>>();
 
 		readCSV("src/postal_code.csv", code_city_area_raw);
 		
@@ -70,12 +75,47 @@ public class postalCode {
 			}
 		}
 		
-		// code1: 
+		// code3_city_area_taipei
+		System.out.println("Taipei:");
+		for(int i = 0; i < code3_city_area.size(); i++) {
+			ArrayList<String> element = code3_city_area.get(i);
+			if(element.get(1).equals("臺北市")) {
+				code3_city_area_taipei.add(element);
+				System.out.println(element);
+			}
+		}
+		
+		// code3_city_area_newtaipei
+		System.out.println("New Taipei:");
+		for(int i = 0; i < code3_city_area.size(); i++) {
+			ArrayList<String> element = code3_city_area.get(i);
+			if(element.get(1).equals("新北市")) {
+				code3_city_area_newtaipei.add(element);
+				System.out.println(element);
+			}
+		}
+
+		
+		// code1: 郵遞區號 -> 縣市 
 		String code1 = "\"" + code3_city.get(0).get(0) + "\"=\"" + code3_city.get(0).get(1) + "\"";
 		for (int i = 1; i < code3_city.size(); i++) {
 			code1 += ", \"" + code3_city.get(i).get(0) + "\"=\"" + code3_city.get(i).get(1) + "\"";
 		}
 		System.out.println(code1);
+		
+		// code2: 郵遞區號（臺北市） ->  鄉鎮市區
+		String code2 = "\"" + code3_city_area_taipei.get(0).get(0) + "\"=\"" + code3_city_area_taipei.get(0).get(2) + "\"";
+		for (int i = 1; i < code3_city_area_taipei.size(); i++) {
+			code2 += ", \"" + code3_city_area_taipei.get(i).get(0) + "\"=\"" + code3_city_area_taipei.get(i).get(2) + "\"";
+		}
+		System.out.println(code2);
+		
+		// code3: 郵遞區號（新北市） ->  鄉鎮市區
+		String code3 = "\"" + code3_city_area_newtaipei.get(0).get(0) + "\"=\"" + code3_city_area_newtaipei.get(0).get(2) + "\"";
+		for (int i = 1; i < code3_city_area_newtaipei.size(); i++) {
+			code3 += ", \"" + code3_city_area_newtaipei.get(i).get(0) + "\"=\"" + code3_city_area_newtaipei.get(i).get(2) + "\"";
+		}
+		System.out.println(code3);
 	
 
 	}
@@ -87,6 +127,7 @@ public class postalCode {
 		    // nextLine[] is an array of values ​​from the line
 			list.add(nextLine[0].substring(0,3) + "," +  nextLine[1] + "," + nextLine[2]);
 		}
+		reader.close();
 		
 	}
 
